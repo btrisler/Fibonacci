@@ -1,0 +1,48 @@
+<project name="FibonacciWS" basedir=".">
+  <property name="TOMCAT_HOME" location="C:/Program Files/Apache Software Foundation/Tomcat 7.0" />
+  <property name="bin" location="./bin" />
+  <property name="src" location="./src" />
+  <property name="resources" location="./src/resources" />
+  
+  <path id="class.path">
+    <fileset dir="./lib">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+  
+  <target name="clean">
+    <delete dir="${bin}" />
+    <mkdir dir="${bin}" />
+    <mkdir dir="${bin}/classes" />
+  </target>
+  
+  <target name="compile" depends="clean">
+    <javac srcdir="${src}"
+         destdir="${bin}/classes"
+         debug="on"
+		 includeantruntime="false">
+      <classpath refid="class.path"/>
+    </javac>
+  </target>
+  
+  <target name="package">
+    <war destfile="${bin}/FibonacciWS.war" webxml="${resources}/web.xml">
+      <classes dir="${bin}/classes"/>
+	  <lib dir="lib" />
+	  <webinf file="${resources}/sun-jaxws.xml" />
+    </war>
+  </target>
+
+  <target name="deploy">
+    <copy file="${bin}/FibonacciWS.war"
+      todir="${TOMCAT_HOME}/webapps"
+      overwrite="true" />
+  </target>
+
+  <target name="undeploy">
+    <delete
+      file="${TOMCAT_HOME}/webapps/FibonacciWS.war"
+      dir="${TOMCAT_HOME}/webapps/FibonacciWS" />
+  </target>
+  
+</project>
